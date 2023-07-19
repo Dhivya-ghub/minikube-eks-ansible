@@ -1,0 +1,92 @@
+https://www.fosstechnix.com/how-to-install-ansible-on-ubuntu-20-04-lts/
+DevopsHint video (ansible install on ubuntu)
+https://github.com/do-community/ansible-playbooks
+https://www.ubuntupit.com/how-to-install-and-set-up-wordpress-with-ansible/ (playbook)
+sudo apt-get update
+sudo apt-get install ansible -y
+ansible --version
+cd /etc
+sudo mkdir ansible
+cd ansible
+sudo nano hosts
+ include the public ip of nodes server
+
+[servers]
+server1 ansible_host=203.0.113.111
+server2 ansible_host=203.0.113.112
+server3 ansible_host=203.0.113.113
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+sudo nano ansible.cfg 
+  include the 2 line
+
+    inventory = /etc/ansible/hosts
+    sudo-user = root
+sudo adduser ansible
+sudo visudo 
+
+go to inside this file and add this line
+ %ansible ALL=(ALL) NOPASSWD:ALL
+./etc/sudoers.d
+ %ansible ALL=(ALL) NOPASSWD:ALL
+
+sudo nano /etc/ssh/sshd_config
+ made changes
+  PubkeyAuthentication yes
+  PasswordAuthentication yes
+sudo systemctl restart sshd
+sudo systemctl status sshd
+
+made changes on node
+ sudo adduser ansible
+sudo visudo 
+
+go to inside this file and add this line
+ %ansible ALL=(ALL) NOPASSWD:ALL
+./etc/sudoers.d
+ %ansible ALL=(ALL) NOPASSWD:ALL
+
+sudo nano /etc/ssh/sshd_config
+ made changes
+  PubkeyAuthentication yes
+  PasswordAuthentication yes
+sudo systemctl restart sshd
+sudo systemctl status sshd
+
+go to the ansible server and change the ansible user
+
+sudo su - ansible
+
+ssh 34.209.55.236(node public ip)
+and here create one file its reflect the node server
+
+o communicate with client we have to genrate SSH key on ansible server node and exchange with Slave/Client Systems.
+
+Step1: we need to generate ssh keygen in ansible server
+
+ssh-keygen 
+Step2: you need to inside .ssh:
+
+cd .ssh
+Step3:Now run the below command using private ip of your node:
+
+permission change for ssh file chmod 700 .ssh -R
+
+ssh-copy-id ansible@{private address }
+
+ansible all -m ping
+
+git clone https://github.com/do-community/ansible-playbooks.git
+
+cd wordpress-lamp_ubuntu1804
+nano vars/default.yml
+
+change the http host and conf give the value of node public ip
+
+
+ansible-playbook playbook.yml -l server1 -u ansibel (username of node)
+
+http://server_host_or_IP
+publicip of node :80 for browser access

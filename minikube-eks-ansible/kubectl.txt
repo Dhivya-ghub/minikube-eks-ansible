@@ -1,0 +1,41 @@
+
+sudo apt-get update
+
+sudo apt install awscli
+aws configure
+aws iam list-users
+curl -Lo aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.9/aws-iam-authenticator_0.5.9_linux_amd64
+
+chmod +x ./aws-iam-authenticator
+mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$HOME/bin:$PATH
+aws-iam-authenticator help
+curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.27.1/2023-04-19/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install --update
+
+mkdir .kube
+cd .kube/
+vi config
+mv ~/.kube/config ~/.kube/config.bk
+aws eks update-kubeconfig --region ${AWS_REGION}  --name ${EKS_CLUSTER_NAME}
+aws eks update-kubeconfig --region us-west-2 --name eks1
+export KUBECONFIG=~//.kube/config
+kubectl get svc
+kubectl get nodes
+kubectl get ns
+kubectl get nodes --watch
+kubectl get pods
+ git clone https://github.com/learnitguide/kubernetes-knote.git
+cd kubernetes-knote
+edit those 2 yaml file 
+kubectl apply -f mongo.yaml
+kunectl apply -f knote.yaml
+kubectl get pods -o wide
+kubectl get svc
+nslookup ad16f0b8dde0941119e54381aa500ef4-963033848.us-west-2.elb.amazonaws.com (lb dns)
+curl ad16f0b8dde0941119e54381aa500ef4-963033848.us-west-2.elb.amazonaws.com
+check browser ad16f0b8dde0941119e54381aa500ef4-963033848.us-west-2.elb.amazonaws.com
